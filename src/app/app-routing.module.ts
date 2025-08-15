@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SortableTreeComponent } from './sortable-tree/sortable-tree.component';
+import { MenuListComponent } from './menu-list/menu-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'menu' },
-  { path: 'menu', component: SortableTreeComponent}
+  { path: 'menu', component: MenuListComponent}
   // {path: 'menu', loadChildren: ()=>import('./menu/menu.module').then(m=>m.MenuModule)}
 ];
 

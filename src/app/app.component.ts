@@ -7,6 +7,7 @@ import { KeycloakService } from 'keycloak-angular';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  sessionStorage = sessionStorage
   logout() {
     this.keycloak.logout();
   }

@@ -1,7 +1,7 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { EventEmitter } from '@angular/core';
-import { TreeDataSource, DynamicFlatNode, TreeService } from './dynamic-data-source';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DynamicFlatNode, TreeDataSource, TreeService } from './dynamic-data-source';
 import * as i0 from "@angular/core";
 /***
  * 可以进行排序的树，整体管理

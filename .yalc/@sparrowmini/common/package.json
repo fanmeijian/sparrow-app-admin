@@ -1,0 +1,28 @@
+{
+  "name": "@sparrowmini/common",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "jsonpath-plus": "^10.3.0"
+  },
+  "dependencies": {
+    "jsonpath-plus": "^10.3.0",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "module": "fesm2022/sparrowmini-common.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/sparrowmini-common.mjs",
+      "esm": "./esm2022/sparrowmini-common.mjs",
+      "default": "./fesm2022/sparrowmini-common.mjs"
+    }
+  },
+  "yalcSig": "a0cff7f06b9e1d56440f851ee1acaa55"
+}

@@ -2,19 +2,19 @@
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>应用管理</span>
+  <div class="breadcrumb">首页 /</div>
   <span class="example-spacer"></span>
   <button mat-button color="accent" (click)="logout()">注销</button>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer
-    #drawer
-    style="width: 200px; overflow-x: unset; overflow-y: unset"
-    mode="side"
-    opened
-  >
-  <app-menu-list></app-menu-list>
+  <mat-drawer #drawer mode="side" opened>
+    <div class="menu-container">
+      <div style="overflow: auto"><spr-menu></spr-menu></div>
+      <div class="user-info">
+        <span>{{sessionStorage.getItem('username')}}</span>
+      </div>
+    </div>
   </mat-drawer>
 
   <div class="sidenav-content">
