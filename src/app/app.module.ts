@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MenuRoutingModule } from './menu-module/menu-routing.module';
+import { MenuRoutingModule } from './menu/menu-routing.module';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { environment } from 'src/environments/environment';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -13,7 +13,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MenuListComponent } from './menu-list/menu-list.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTreeModule } from '@angular/material/tree';
@@ -21,6 +20,7 @@ import { MenuService } from './service/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TREE_SERVICE, TreeModule } from '@sparrowmini/common-ui-nm';
 import { CommonPipeModule } from '@sparrowmini/common';
+import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH } from '@sparrowmini/common-api';
 
 export const BASE_PATH: InjectionToken<string> = new InjectionToken('apiBase')
 
@@ -45,7 +45,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
 @NgModule({
   declarations: [
     AppComponent,
-    MenuListComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +63,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     DragDropModule,
     TreeModule,
     CommonPipeModule,
+    CommonApiModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -74,7 +74,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
       deps: [KeycloakService],
     },
     { provide: TREE_SERVICE, useClass: MenuService },
-    { provide: BASE_PATH, useValue: environment.apiBase }
+    { provide: BASE_PATH, useValue: environment.apiBase },
+    { provide: COMMON_API_BASE_PATH, useValue: environment.apiBase }
   ],
   bootstrap: [AppComponent]
 })

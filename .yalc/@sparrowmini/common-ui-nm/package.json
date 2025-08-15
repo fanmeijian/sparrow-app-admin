@@ -1,6 +1,6 @@
 {
   "name": "@sparrowmini/common-ui-nm",
-  "version": "0.0.1",
+  "version": "0.0.0-watch+1755282933736",
   "peerDependencies": {
     "@angular/common": "^16.2.0",
     "@angular/core": "^16.2.0",
@@ -26,5 +26,5 @@
       "default": "./fesm2022/sparrowmini-common-ui-nm.mjs"
     }
   },
-  "yalcSig": "96c5d49713624af3434ba177c9de89b2"
+  "yalcSig": "e7e99e6a6ad81e012bd1dffa1c2b20a5"
 }

@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@sparrowmini/common": "file:.yalc/@sparrowmini/common",
+    "@sparrowmini/common-api": "file:.yalc/@sparrowmini/common-api",
     "@sparrowmini/common-ui-nm": "file:.yalc/@sparrowmini/common-ui-nm",
     "jsonpath-plus": "^10.3.0",
     "keycloak-angular": "^14.4.0",

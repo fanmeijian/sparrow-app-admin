@@ -5,5 +5,5 @@ export * from './lib/dialog/dialog.module';
 export * from './lib/dialog/dialog.service';
 export * from './lib/tree/menu/menu.component';
 export * from './lib/tree/sortable-tree/sortable-tree.component';
-export * from './lib/tree/tree.module';
+export * from './lib/tree/spr-tree.module';
 export * from './lib/tree/sortable-tree/dynamic-data-source';

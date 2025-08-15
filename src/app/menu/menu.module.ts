@@ -7,11 +7,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
+import { MenuAdminComponent } from './menu-admin/menu-admin.component';
+import { MenuListComponent } from './menu-list/menu-list.component';
+import { TreeModule } from '@sparrowmini/common-ui-nm';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
   declarations: [
-
+    MenuAdminComponent,
+    MenuListComponent,
   ],
   imports: [
     CommonModule,
@@ -22,6 +27,8 @@ import { MenuRoutingModule } from './menu-routing.module';
     MatIconModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    TreeModule,
+    MatMenuModule,
   ],
   providers: [
 

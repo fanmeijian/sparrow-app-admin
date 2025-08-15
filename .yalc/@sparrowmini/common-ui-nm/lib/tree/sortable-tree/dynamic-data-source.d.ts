@@ -50,4 +50,6 @@ export declare class TreeDataSource implements DataSource<DynamicFlatNode> {
      * Toggle the node, remove from display list
      */
     toggleNode(node: DynamicFlatNode, expand: boolean): void;
+    hasCache(node: any): number;
+    getCache(node: any): DynamicFlatNode[] | undefined;
 }

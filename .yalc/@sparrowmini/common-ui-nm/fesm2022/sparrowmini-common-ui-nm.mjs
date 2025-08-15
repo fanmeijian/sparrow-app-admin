@@ -18,15 +18,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import * as i8 from '@sparrowmini/common';
 import { CommonPipeModule } from '@sparrowmini/common';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { BehaviorSubject, merge, map } from 'rxjs';
+import { BehaviorSubject, merge, map, of } from 'rxjs';
 import * as i3$1 from '@angular/material/tree';
 import { MatTreeModule } from '@angular/material/tree';
 import * as i4$1 from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import * as i5$1 from '@angular/material/progress-spinner';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import * as i7$1 from '@angular/cdk/drag-drop';
+import * as i8$1 from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
 
 class ConfirmDialogComponent {
     constructor(dialogRef, data) {
@@ -404,7 +405,8 @@ class TreeDataSource {
             console.log(this.nodeCache);
             let children;
             node.isLoading = true;
-            const $childrenRequest = this.treeService.getChildren(node);
+            const childrenCache = this.getCache(node);
+            const $childrenRequest = childrenCache ? of(childrenCache) : this.treeService.getChildren(node);
             $childrenRequest.subscribe((childrenNames) => {
                 children = childrenNames;
                 if (!children || index < 0)
@@ -413,7 +415,7 @@ class TreeDataSource {
                 this.data.splice(index + 1, 0, ...children);
                 this.dataChange.next(this.data);
                 node.isLoading = false;
-                this.nodeCache.set(node.id, children);
+                this.nodeCache.set(node, children);
             });
         }
         else {
@@ -423,6 +425,13 @@ class TreeDataSource {
             this.data.splice(index + 1, count);
             this.dataChange.next(this.data);
         }
+    }
+    hasCache(node) {
+        return Array.from(this.nodeCache.keys()).findIndex(f => f.id === node.id);
+    }
+    getCache(node) {
+        const key = Array.from(this.nodeCache.keys()).find(f => f.id === node.id);
+        return this.nodeCache.get(key);
     }
 }
 
@@ -441,11 +450,11 @@ class MenuComponent {
         });
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: MenuComponent, deps: [{ token: TREE_SERVICE }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.2.12", type: MenuComponent, selector: "spr-menu", inputs: { multiple: "multiple" }, outputs: { onTreeSelect: "onTreeSelect" }, ngImport: i0, template: "<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodePadding>\n      <button mat-icon-button disabled></button>\n      <span [class]=\"\n          selectedNode === node.url\n            ? 'norml-tree-node selected-norml-tree-node'\n            : 'norml-tree-node'\n        \" [routerLink]=\"node.url\" (click)=\"selectedNode = node.url\">{{ node.name }}</span>\n    </mat-tree-node>\n\n    <mat-tree-node *matTreeNodeDef=\"let node; when: hasChild\" matTreeNodePadding>\n      <button type=\"button\" mat-icon-button matTreeNodeToggle [disabled]=\"node.isLoading\">\n        <mat-icon>\n          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}\n        </mat-icon>\n      </button>\n      <span class=\"s-link\">{{ node.name }}({{node.childCount}})</span>\n\n      <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n            <div [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\" role=\"group\">\n        <ng-container matTreeNodeOutlet></ng-container>\n      </div>\n    </mat-tree-node>\n  </mat-tree>\n", styles: [""], dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "directive", type: i3.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "directive", type: i3$1.MatTreeNodeDef, selector: "[matTreeNodeDef]", inputs: ["matTreeNodeDefWhen", "matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodePadding, selector: "[matTreeNodePadding]", inputs: ["matTreeNodePadding", "matTreeNodePaddingIndent"] }, { kind: "directive", type: i3$1.MatTreeNodeToggle, selector: "[matTreeNodeToggle]", inputs: ["matTreeNodeToggleRecursive"] }, { kind: "component", type: i3$1.MatTree, selector: "mat-tree", exportAs: ["matTree"] }, { kind: "directive", type: i3$1.MatTreeNode, selector: "mat-tree-node", inputs: ["role", "disabled", "tabIndex"], exportAs: ["matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodeOutlet, selector: "[matTreeNodeOutlet]" }, { kind: "component", type: i4$1.MatIcon, selector: "mat-icon", inputs: ["color", "inline", "svgIcon", "fontSet", "fontIcon"], exportAs: ["matIcon"] }, { kind: "component", type: i5$1.MatProgressSpinner, selector: "mat-progress-spinner, mat-spinner", inputs: ["color", "mode", "value", "diameter", "strokeWidth"], exportAs: ["matProgressSpinner"] }, { kind: "component", type: i6.MatIconButton, selector: "button[mat-icon-button]", inputs: ["disabled", "disableRipple", "color"], exportAs: ["matButton"] }] }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.2.12", type: MenuComponent, selector: "spr-menu", inputs: { multiple: "multiple" }, outputs: { onTreeSelect: "onTreeSelect" }, ngImport: i0, template: "<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodePadding>\n      <button mat-icon-button disabled></button>\n      <span [class]=\"\n          selectedNode === node.url\n            ? 'norml-tree-node selected-norml-tree-node'\n            : 'norml-tree-node'\n        \" [routerLink]=\"node.url\" (click)=\"selectedNode = node.url\">{{ node.name }}</span>\n    </mat-tree-node>\n\n    <mat-tree-node *matTreeNodeDef=\"let node; when: hasChild\" matTreeNodePadding>\n      <button type=\"button\" mat-icon-button matTreeNodeToggle [disabled]=\"node.isLoading\">\n        <mat-icon>\n          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}\n        </mat-icon>\n      </button>\n      <span class=\"s-link\">{{ node.name }}</span>\n\n      <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n            <div [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\" role=\"group\">\n        <ng-container matTreeNodeOutlet></ng-container>\n      </div>\n    </mat-tree-node>\n  </mat-tree>\n", styles: [""], dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "directive", type: i3.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "directive", type: i3$1.MatTreeNodeDef, selector: "[matTreeNodeDef]", inputs: ["matTreeNodeDefWhen", "matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodePadding, selector: "[matTreeNodePadding]", inputs: ["matTreeNodePadding", "matTreeNodePaddingIndent"] }, { kind: "directive", type: i3$1.MatTreeNodeToggle, selector: "[matTreeNodeToggle]", inputs: ["matTreeNodeToggleRecursive"] }, { kind: "component", type: i3$1.MatTree, selector: "mat-tree", exportAs: ["matTree"] }, { kind: "directive", type: i3$1.MatTreeNode, selector: "mat-tree-node", inputs: ["role", "disabled", "tabIndex"], exportAs: ["matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodeOutlet, selector: "[matTreeNodeOutlet]" }, { kind: "component", type: i4$1.MatIcon, selector: "mat-icon", inputs: ["color", "inline", "svgIcon", "fontSet", "fontIcon"], exportAs: ["matIcon"] }, { kind: "component", type: i5$1.MatProgressSpinner, selector: "mat-progress-spinner, mat-spinner", inputs: ["color", "mode", "value", "diameter", "strokeWidth"], exportAs: ["matProgressSpinner"] }, { kind: "component", type: i6.MatIconButton, selector: "button[mat-icon-button]", inputs: ["disabled", "disableRipple", "color"], exportAs: ["matButton"] }] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: MenuComponent, decorators: [{
             type: Component,
-            args: [{ selector: 'spr-menu', template: "<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodePadding>\n      <button mat-icon-button disabled></button>\n      <span [class]=\"\n          selectedNode === node.url\n            ? 'norml-tree-node selected-norml-tree-node'\n            : 'norml-tree-node'\n        \" [routerLink]=\"node.url\" (click)=\"selectedNode = node.url\">{{ node.name }}</span>\n    </mat-tree-node>\n\n    <mat-tree-node *matTreeNodeDef=\"let node; when: hasChild\" matTreeNodePadding>\n      <button type=\"button\" mat-icon-button matTreeNodeToggle [disabled]=\"node.isLoading\">\n        <mat-icon>\n          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}\n        </mat-icon>\n      </button>\n      <span class=\"s-link\">{{ node.name }}({{node.childCount}})</span>\n\n      <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n            <div [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\" role=\"group\">\n        <ng-container matTreeNodeOutlet></ng-container>\n      </div>\n    </mat-tree-node>\n  </mat-tree>\n" }]
+            args: [{ selector: 'spr-menu', template: "<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\">\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodePadding>\n      <button mat-icon-button disabled></button>\n      <span [class]=\"\n          selectedNode === node.url\n            ? 'norml-tree-node selected-norml-tree-node'\n            : 'norml-tree-node'\n        \" [routerLink]=\"node.url\" (click)=\"selectedNode = node.url\">{{ node.name }}</span>\n    </mat-tree-node>\n\n    <mat-tree-node *matTreeNodeDef=\"let node; when: hasChild\" matTreeNodePadding>\n      <button type=\"button\" mat-icon-button matTreeNodeToggle [disabled]=\"node.isLoading\">\n        <mat-icon>\n          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}\n        </mat-icon>\n      </button>\n      <span class=\"s-link\">{{ node.name }}</span>\n\n      <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n            <div [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\" role=\"group\">\n        <ng-container matTreeNodeOutlet></ng-container>\n      </div>\n    </mat-tree-node>\n  </mat-tree>\n" }]
         }], ctorParameters: function () { return [{ type: undefined, decorators: [{
                     type: Inject,
                     args: [TREE_SERVICE]
@@ -455,13 +464,100 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.2.12", ngImpo
                 type: Output
             }] } });
 
+// @Injectable({ providedIn: 'root' })
+class ChecklistSelectionService {
+    constructor(multiple) {
+        this.multiple = multiple;
+        this.selected = new SelectionModel(this.multiple);
+    }
+    isSelected(node) {
+        return this.selected.selected.findIndex(f => f.id === node.id) >= 0;
+    }
+    toggleSelection(node, nodeCache) {
+        if (this.multiple) {
+            const descendants = this.getNodeCache(node, nodeCache);
+            const isNowSelected = this.isSelected(node);
+            console.log(descendants, isNowSelected, nodeCache);
+            if (isNowSelected) {
+                this.selected.deselect(node);
+                descendants?.forEach((child) => this.selected.deselect(child));
+            }
+            else {
+                this.selected.select(node);
+                descendants?.forEach((child) => this.selected.select(child));
+            }
+        }
+        else {
+            this.clearCurrentState(this.selected.selected[0], nodeCache);
+            this.selected.toggle(node);
+        }
+        this.updatePartialStatesUp(node, nodeCache);
+    }
+    //单选的时候，清理原已选节点的父的中间状态
+    clearCurrentState(node, nodeCache) {
+        if (!node)
+            return;
+        let parent = Array.from(nodeCache.keys()).find((f) => f.id === node.parentId);
+        if (!node.parentId) {
+            parent = node;
+        }
+        else {
+            this.clearCurrentState(parent, nodeCache);
+        }
+        parent.indeterminate = false;
+    }
+    updatePartialStatesUp(node, nodeCache) {
+        let parent = Array.from(nodeCache.keys()).find((f) => f.id === node.parentId);
+        if (!node.parentId) {
+            parent = node;
+        }
+        else {
+            this.updatePartialStatesUp(parent, nodeCache);
+        }
+        const children = this.getNodeCache(parent, nodeCache) || [];
+        const allSelected = children.every((child) => this.isSelected(child));
+        const someSelected = children.some((child) => this.isSelected(child));
+        if (allSelected) {
+            if (node.parentId) {
+                this.selected.select(parent);
+            }
+            parent.indeterminate = false;
+        }
+        else if (someSelected) {
+            console.log('2');
+            this.selected.deselect(parent);
+            parent.indeterminate = true;
+        }
+        else {
+            if (this.multiple) {
+                this.selected.deselect(parent);
+            }
+            console.log('3');
+            parent.indeterminate = false;
+        }
+        console.log(this.selected.selected);
+    }
+    getNodeCache(node, nodeCache) {
+        const key = Array.from(nodeCache.keys()).find((f) => f.id === node.id);
+        return nodeCache.get(key);
+    }
+    clear() {
+        this.selected.clear();
+    }
+}
+
 /***
  * 可以进行排序的树，整体管理
  */
 class SortableTreeComponent {
+    onToggle(node) {
+        this.checklistSelectionService.toggleSelection(node, this.dataSource.nodeCache);
+        this.onTreeSelect?.emit(this.checklistSelectionService.selected.selected.map(m => m.id));
+    }
     constructor(treeService) {
         this.treeService = treeService;
         this.multiple = true;
+        this.initSelected = [];
         this.onTreeSelect = new EventEmitter();
         this.hasChild = (_, node) => node.expandable;
         this.treeControl = new FlatTreeControl((node) => node.level, (node) => node.expandable);
@@ -471,7 +567,8 @@ class SortableTreeComponent {
         this.expansionModel = new SelectionModel(true);
     }
     ngOnInit() {
-        console.log(this.treeService);
+        this.checklistSelectionService = new ChecklistSelectionService(this.multiple);
+        this.initSelected.forEach(f => this.checklistSelectionService.selected.select(f));
         this.dataSource = new TreeDataSource(this.treeControl, this.treeService);
         this.treeService.initialData().subscribe(res => {
             this.dataSource.data = res;
@@ -541,15 +638,17 @@ class SortableTreeComponent {
         // })
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: SortableTreeComponent, deps: [{ token: TREE_SERVICE }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.2.12", type: SortableTreeComponent, selector: "spr-sortable-tree", inputs: { multiple: "multiple" }, outputs: { onTreeSelect: "onTreeSelect" }, ngImport: i0, template: "<mat-tree\n  [dataSource]=\"dataSource\"\n  [treeControl]=\"treeControl\"\n  [cdkDropListData]=\"dataSource.data\"\n  cdkDropList\n  (cdkDropListDropped)=\"drop($event)\"\n>\n  <mat-tree-node\n    *matTreeNodeDef=\"let node\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button mat-icon-button disabled></button>\n    <span\n      [class]=\"\n        selectedNode === node.url\n          ? 'norml-tree-node selected-norml-tree-node'\n          : 'norml-tree-node'\n      \"\n      [routerLink]=\"node.url\"\n      (click)=\"selectedNode = node.url\"\n      >{{ node.name }}</span\n    >\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n  </mat-tree-node>\n\n  <mat-tree-node\n    *matTreeNodeDef=\"let node; when: hasChild\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button\n      type=\"button\"\n      mat-icon-button\n      matTreeNodeToggle\n      [disabled]=\"node.isLoading\"\n      (click)=\"expansionModel.toggle(node.id)\"\n    >\n      <mat-icon>\n        {{ treeControl.isExpanded(node) ? \"expand_more\" : \"chevron_right\" }}\n      </mat-icon>\n    </button>\n    <span class=\"s-link\">{{ node.name }}</span>\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n    <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n    <div\n      [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\"\n      role=\"group\"\n    >\n      <ng-container matTreeNodeOutlet></ng-container>\n    </div>\n  </mat-tree-node>\n</mat-tree>\n", styles: [""], dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "directive", type: i3.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "directive", type: i3$1.MatTreeNodeDef, selector: "[matTreeNodeDef]", inputs: ["matTreeNodeDefWhen", "matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodePadding, selector: "[matTreeNodePadding]", inputs: ["matTreeNodePadding", "matTreeNodePaddingIndent"] }, { kind: "directive", type: i3$1.MatTreeNodeToggle, selector: "[matTreeNodeToggle]", inputs: ["matTreeNodeToggleRecursive"] }, { kind: "component", type: i3$1.MatTree, selector: "mat-tree", exportAs: ["matTree"] }, { kind: "directive", type: i3$1.MatTreeNode, selector: "mat-tree-node", inputs: ["role", "disabled", "tabIndex"], exportAs: ["matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodeOutlet, selector: "[matTreeNodeOutlet]" }, { kind: "component", type: i4$1.MatIcon, selector: "mat-icon", inputs: ["color", "inline", "svgIcon", "fontSet", "fontIcon"], exportAs: ["matIcon"] }, { kind: "component", type: i5$1.MatProgressSpinner, selector: "mat-progress-spinner, mat-spinner", inputs: ["color", "mode", "value", "diameter", "strokeWidth"], exportAs: ["matProgressSpinner"] }, { kind: "component", type: i6.MatIconButton, selector: "button[mat-icon-button]", inputs: ["disabled", "disableRipple", "color"], exportAs: ["matButton"] }, { kind: "directive", type: i7$1.CdkDropList, selector: "[cdkDropList], cdk-drop-list", inputs: ["cdkDropListConnectedTo", "cdkDropListData", "cdkDropListOrientation", "id", "cdkDropListLockAxis", "cdkDropListDisabled", "cdkDropListSortingDisabled", "cdkDropListEnterPredicate", "cdkDropListSortPredicate", "cdkDropListAutoScrollDisabled", "cdkDropListAutoScrollStep"], outputs: ["cdkDropListDropped", "cdkDropListEntered", "cdkDropListExited", "cdkDropListSorted"], exportAs: ["cdkDropList"] }, { kind: "directive", type: i7$1.CdkDrag, selector: "[cdkDrag]", inputs: ["cdkDragData", "cdkDragLockAxis", "cdkDragRootElement", "cdkDragBoundary", "cdkDragStartDelay", "cdkDragFreeDragPosition", "cdkDragDisabled", "cdkDragConstrainPosition", "cdkDragPreviewClass", "cdkDragPreviewContainer"], outputs: ["cdkDragStarted", "cdkDragReleased", "cdkDragEnded", "cdkDragEntered", "cdkDragExited", "cdkDragDropped", "cdkDragMoved"], exportAs: ["cdkDrag"] }, { kind: "directive", type: i7$1.CdkDragHandle, selector: "[cdkDragHandle]", inputs: ["cdkDragHandleDisabled"] }] }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.2.12", type: SortableTreeComponent, selector: "spr-sortable-tree", inputs: { multiple: "multiple", initSelected: "initSelected" }, outputs: { onTreeSelect: "onTreeSelect" }, ngImport: i0, template: "<mat-tree\n  [dataSource]=\"dataSource\"\n  [treeControl]=\"treeControl\"\n  [cdkDropListData]=\"dataSource.data\"\n  cdkDropList\n  (cdkDropListDropped)=\"drop($event)\"\n>\n  <mat-tree-node\n    *matTreeNodeDef=\"let node\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button mat-icon-button disabled></button>\n    <mat-checkbox\n      [checked]=\"checklistSelectionService.isSelected(node)\"\n      (change)=\"onToggle(node)\"\n    ></mat-checkbox>\n    <span\n      [class]=\"\n        selectedNode === node.url\n          ? 'norml-tree-node selected-norml-tree-node'\n          : 'norml-tree-node'\n      \"\n      [routerLink]=\"node.url\"\n      (click)=\"selectedNode = node.url\"\n      >{{ node.name }}</span\n    >\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n  </mat-tree-node>\n\n  <mat-tree-node\n    *matTreeNodeDef=\"let node; when: hasChild\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button\n      type=\"button\"\n      mat-icon-button\n      matTreeNodeToggle\n      [disabled]=\"node.isLoading\"\n      (click)=\"expansionModel.toggle(node.id)\"\n    >\n      <mat-icon>\n        {{ treeControl.isExpanded(node) ? \"expand_more\" : \"chevron_right\" }}\n      </mat-icon>\n    </button>\n    <mat-checkbox\n      [checked]=\"checklistSelectionService.isSelected(node)\"\n      [indeterminate]=\"node.indeterminate\"\n      (change)=\"onToggle(node)\"\n    ></mat-checkbox>\n    <span class=\"s-link\">{{ node.name }}</span>\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n    <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n    <div\n      [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\"\n      role=\"group\"\n    >\n      <ng-container matTreeNodeOutlet></ng-container>\n    </div>\n  </mat-tree-node>\n</mat-tree>\n", styles: [""], dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "directive", type: i3.RouterLink, selector: "[routerLink]", inputs: ["target", "queryParams", "fragment", "queryParamsHandling", "state", "relativeTo", "preserveFragment", "skipLocationChange", "replaceUrl", "routerLink"] }, { kind: "component", type: i7.MatCheckbox, selector: "mat-checkbox", inputs: ["disableRipple", "color", "tabIndex"], exportAs: ["matCheckbox"] }, { kind: "directive", type: i3$1.MatTreeNodeDef, selector: "[matTreeNodeDef]", inputs: ["matTreeNodeDefWhen", "matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodePadding, selector: "[matTreeNodePadding]", inputs: ["matTreeNodePadding", "matTreeNodePaddingIndent"] }, { kind: "directive", type: i3$1.MatTreeNodeToggle, selector: "[matTreeNodeToggle]", inputs: ["matTreeNodeToggleRecursive"] }, { kind: "component", type: i3$1.MatTree, selector: "mat-tree", exportAs: ["matTree"] }, { kind: "directive", type: i3$1.MatTreeNode, selector: "mat-tree-node", inputs: ["role", "disabled", "tabIndex"], exportAs: ["matTreeNode"] }, { kind: "directive", type: i3$1.MatTreeNodeOutlet, selector: "[matTreeNodeOutlet]" }, { kind: "component", type: i4$1.MatIcon, selector: "mat-icon", inputs: ["color", "inline", "svgIcon", "fontSet", "fontIcon"], exportAs: ["matIcon"] }, { kind: "component", type: i5$1.MatProgressSpinner, selector: "mat-progress-spinner, mat-spinner", inputs: ["color", "mode", "value", "diameter", "strokeWidth"], exportAs: ["matProgressSpinner"] }, { kind: "component", type: i6.MatIconButton, selector: "button[mat-icon-button]", inputs: ["disabled", "disableRipple", "color"], exportAs: ["matButton"] }, { kind: "directive", type: i8$1.CdkDropList, selector: "[cdkDropList], cdk-drop-list", inputs: ["cdkDropListConnectedTo", "cdkDropListData", "cdkDropListOrientation", "id", "cdkDropListLockAxis", "cdkDropListDisabled", "cdkDropListSortingDisabled", "cdkDropListEnterPredicate", "cdkDropListSortPredicate", "cdkDropListAutoScrollDisabled", "cdkDropListAutoScrollStep"], outputs: ["cdkDropListDropped", "cdkDropListEntered", "cdkDropListExited", "cdkDropListSorted"], exportAs: ["cdkDropList"] }, { kind: "directive", type: i8$1.CdkDrag, selector: "[cdkDrag]", inputs: ["cdkDragData", "cdkDragLockAxis", "cdkDragRootElement", "cdkDragBoundary", "cdkDragStartDelay", "cdkDragFreeDragPosition", "cdkDragDisabled", "cdkDragConstrainPosition", "cdkDragPreviewClass", "cdkDragPreviewContainer"], outputs: ["cdkDragStarted", "cdkDragReleased", "cdkDragEnded", "cdkDragEntered", "cdkDragExited", "cdkDragDropped", "cdkDragMoved"], exportAs: ["cdkDrag"] }, { kind: "directive", type: i8$1.CdkDragHandle, selector: "[cdkDragHandle]", inputs: ["cdkDragHandleDisabled"] }] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: SortableTreeComponent, decorators: [{
             type: Component,
-            args: [{ selector: 'spr-sortable-tree', template: "<mat-tree\n  [dataSource]=\"dataSource\"\n  [treeControl]=\"treeControl\"\n  [cdkDropListData]=\"dataSource.data\"\n  cdkDropList\n  (cdkDropListDropped)=\"drop($event)\"\n>\n  <mat-tree-node\n    *matTreeNodeDef=\"let node\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button mat-icon-button disabled></button>\n    <span\n      [class]=\"\n        selectedNode === node.url\n          ? 'norml-tree-node selected-norml-tree-node'\n          : 'norml-tree-node'\n      \"\n      [routerLink]=\"node.url\"\n      (click)=\"selectedNode = node.url\"\n      >{{ node.name }}</span\n    >\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n  </mat-tree-node>\n\n  <mat-tree-node\n    *matTreeNodeDef=\"let node; when: hasChild\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button\n      type=\"button\"\n      mat-icon-button\n      matTreeNodeToggle\n      [disabled]=\"node.isLoading\"\n      (click)=\"expansionModel.toggle(node.id)\"\n    >\n      <mat-icon>\n        {{ treeControl.isExpanded(node) ? \"expand_more\" : \"chevron_right\" }}\n      </mat-icon>\n    </button>\n    <span class=\"s-link\">{{ node.name }}</span>\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n    <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n    <div\n      [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\"\n      role=\"group\"\n    >\n      <ng-container matTreeNodeOutlet></ng-container>\n    </div>\n  </mat-tree-node>\n</mat-tree>\n" }]
+            args: [{ selector: 'spr-sortable-tree', template: "<mat-tree\n  [dataSource]=\"dataSource\"\n  [treeControl]=\"treeControl\"\n  [cdkDropListData]=\"dataSource.data\"\n  cdkDropList\n  (cdkDropListDropped)=\"drop($event)\"\n>\n  <mat-tree-node\n    *matTreeNodeDef=\"let node\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button mat-icon-button disabled></button>\n    <mat-checkbox\n      [checked]=\"checklistSelectionService.isSelected(node)\"\n      (change)=\"onToggle(node)\"\n    ></mat-checkbox>\n    <span\n      [class]=\"\n        selectedNode === node.url\n          ? 'norml-tree-node selected-norml-tree-node'\n          : 'norml-tree-node'\n      \"\n      [routerLink]=\"node.url\"\n      (click)=\"selectedNode = node.url\"\n      >{{ node.name }}</span\n    >\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n  </mat-tree-node>\n\n  <mat-tree-node\n    *matTreeNodeDef=\"let node; when: hasChild\"\n    matTreeNodePadding\n    [cdkDragData]=\"node\"\n    cdkDragLockAxis=\"y\"\n    cdkDrag\n  >\n    <button\n      type=\"button\"\n      mat-icon-button\n      matTreeNodeToggle\n      [disabled]=\"node.isLoading\"\n      (click)=\"expansionModel.toggle(node.id)\"\n    >\n      <mat-icon>\n        {{ treeControl.isExpanded(node) ? \"expand_more\" : \"chevron_right\" }}\n      </mat-icon>\n    </button>\n    <mat-checkbox\n      [checked]=\"checklistSelectionService.isSelected(node)\"\n      [indeterminate]=\"node.indeterminate\"\n      (change)=\"onToggle(node)\"\n    ></mat-checkbox>\n    <span class=\"s-link\">{{ node.name }}</span>\n    <button mat-icon-button cdkDragLockAxis=\"y\" cdkDragHandle>\n      <mat-icon>drag_indicator</mat-icon>\n    </button>\n    <mat-spinner *ngIf=\"node.isLoading\" [diameter]=\"18\"></mat-spinner>\n    <div\n      [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\"\n      role=\"group\"\n    >\n      <ng-container matTreeNodeOutlet></ng-container>\n    </div>\n  </mat-tree-node>\n</mat-tree>\n" }]
         }], ctorParameters: function () { return [{ type: undefined, decorators: [{
                     type: Inject,
                     args: [TREE_SERVICE]
                 }] }]; }, propDecorators: { multiple: [{
+                type: Input
+            }], initSelected: [{
                 type: Input
             }], onTreeSelect: [{
                 type: Output
@@ -565,7 +664,8 @@ class TreeModule {
             MatIconModule,
             MatProgressSpinnerModule,
             MatButtonModule,
-            DragDropModule], exports: [SortableTreeComponent, MenuComponent] }); }
+            DragDropModule,
+            MatMenuModule], exports: [SortableTreeComponent, MenuComponent] }); }
     static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: TreeModule, imports: [CommonModule,
             RouterModule,
             MatCheckboxModule,
@@ -573,7 +673,8 @@ class TreeModule {
             MatIconModule,
             MatProgressSpinnerModule,
             MatButtonModule,
-            DragDropModule] }); }
+            DragDropModule,
+            MatMenuModule] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.2.12", ngImport: i0, type: TreeModule, decorators: [{
             type: NgModule,
@@ -591,6 +692,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.2.12", ngImpo
                         MatProgressSpinnerModule,
                         MatButtonModule,
                         DragDropModule,
+                        MatMenuModule,
                     ],
                     exports: [SortableTreeComponent, MenuComponent]
                 }]
