@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@sparrowmini/common-ui-nm": {
+      "signature": "aae70b108391629bc15aa461dea10114",
+      "file": true
+    }
+  }
+}

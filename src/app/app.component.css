@@ -1,0 +1,11 @@
+.example-spacer{
+  margin: 0 auto;
+}
+
+mat-drawer-container{
+  height: calc(100vh - 60px);
+}
+
+.sidenav-content{
+  padding: 0.5rem;
+}
