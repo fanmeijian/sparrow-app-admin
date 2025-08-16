@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonTreeService } from '@sparrowmini/common-api';
+import { MenuClass } from '../menu.constant';
 
 @Component({
   selector: 'app-menu-form',
@@ -11,11 +12,11 @@ import { CommonTreeService } from '@sparrowmini/common-api';
 })
 export class MenuFormComponent implements OnInit {
   onTreeSelect($event: any[]) {
-    this.formGroup.patchValue({parentId: $event[0]});
+    this.formGroup.patchValue({ parentId: $event[0] });
   }
   treeNode: any
   submit() {
-    this.commonTreeService.upsert('cn.sparrowmini.permission.menu.model.Menu', [this.formGroup.value]).subscribe();
+    this.commonTreeService.upsert(MenuClass, [this.formGroup.value]).subscribe();
   }
   formGroup: UntypedFormGroup = new FormGroup({
     name: new FormControl(null, Validators.required),
@@ -35,14 +36,17 @@ export class MenuFormComponent implements OnInit {
     private commonTreeService: CommonTreeService,
   ) { }
   ngOnInit(): void {
-    this.formGroup.disable()
     this.route.params.subscribe((params: any) => {
       const id = params.id
-      if (id) {
-        this.commonTreeService.get('cn.sparrowmini.permission.menu.model.Menu', id).subscribe(res => {
+      if (id && id!=='new') {
+        this.formGroup.disable()
+        this.commonTreeService.get(MenuClass, id).subscribe(res => {
           this.formGroup.patchValue(res)
           this.treeNode = res
         });
+      }else{
+        this.formGroup.enable()
+        this.formGroup.reset()
       }
     });
 

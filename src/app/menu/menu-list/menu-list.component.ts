@@ -4,6 +4,7 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonApiService, CommonTreeService } from '@sparrowmini/common-api';
 import { DynamicFlatNode, TREE_SERVICE, TreeDataSource, TreeService } from '@sparrowmini/common-ui-nm';
+import { MenuClass } from '../menu.constant';
 
 @Component({
   selector: 'app-menu-list',
@@ -26,7 +27,7 @@ export class MenuListComponent {
   }
   delete() {
     const body = this.checklistSelection.selected
-    this.commonTreeService.delete('cn.sparrowmini.permission.menu.model.Menu',body).subscribe();
+    this.commonTreeService.delete(MenuClass,body).subscribe();
   }
   checklistSelection = new SelectionModel<any>(
     true /* multiple */

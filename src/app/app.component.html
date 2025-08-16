@@ -10,7 +10,14 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer mode="side" opened>
     <div class="menu-container">
-      <div style="overflow: auto"><spr-menu></spr-menu></div>
+      <div style="overflow: auto; height: 100%;" class="s-col">
+        <!-- <spr-menu></spr-menu> -->
+         <a mat-button routerLink="menu" color="primary">菜单</a>
+         <a mat-button routerLink="scope" color="primary">功能</a>
+         <a mat-button routerLink="page" color="primary">页面</a>
+         <a mat-button routerLink="dict" color="primary">数据字典</a>
+         <a mat-button routerLink="config" color="primary">配置</a>
+      </div>
       <div class="user-info">
         <span>{{sessionStorage.getItem('username')}}</span>
       </div>

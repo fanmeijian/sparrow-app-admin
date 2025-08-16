@@ -4,7 +4,8 @@ import { MenuListComponent } from './menu/menu-list/menu-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'menu' },
-  {path: 'menu', loadChildren: ()=>import('./menu/menu.module').then(m=>m.MenuModule)}
+  { path: 'menu', loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule) },
+  { path: 'scope', loadChildren: () => import('./scope/scope.module').then(m => m.ScopeModule) },
 ];
 
 @NgModule({

@@ -4,11 +4,11 @@ import { MenuListComponent } from "./menu-list/menu-list.component";
 import { MenuFormComponent } from "./menu-form/menu-form.component";
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'menu-list'},
+  { path: '', pathMatch: 'full', redirectTo: 'menu-list' },
   {
     path: 'menu-list', component: MenuListComponent,
     children: [
-      {path: ':id', component: MenuFormComponent}
+      { path: ':id', component: MenuFormComponent },
     ]
   }
 ]
