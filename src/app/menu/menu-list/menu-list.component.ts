@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonApiService } from '@sparrowmini/common-api';
 import { DynamicFlatNode, TREE_SERVICE, TreeDataSource, TreeService } from '@sparrowmini/common-ui-nm';
 
@@ -10,6 +11,9 @@ import { DynamicFlatNode, TREE_SERVICE, TreeDataSource, TreeService } from '@spa
   styleUrls: ['./menu-list.component.css']
 })
 export class MenuListComponent {
+  onNodeClick($event: any) {
+    this.router.navigate([$event.id],{relativeTo: this.route});
+  }
   onTreeSelect($event: any[]) {
     console.log($event);
     this.checklistSelection.clear()
@@ -28,6 +32,8 @@ export class MenuListComponent {
   );
 
   constructor(
-    private commonApi: CommonApiService
-  ){}
+    private commonApi: CommonApiService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) { }
 }

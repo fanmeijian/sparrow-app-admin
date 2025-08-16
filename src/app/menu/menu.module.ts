@@ -7,16 +7,22 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
-import { MenuAdminComponent } from './menu-admin/menu-admin.component';
 import { MenuListComponent } from './menu-list/menu-list.component';
-import { TreeModule } from '@sparrowmini/common-ui-nm';
+import { SprTreeModule } from '@sparrowmini/common-ui-nm';
 import { MatMenuModule } from '@angular/material/menu';
+import { MenuFormComponent } from './menu-form/menu-form.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 @NgModule({
   declarations: [
-    MenuAdminComponent,
     MenuListComponent,
+    MenuFormComponent,
   ],
   imports: [
     CommonModule,
@@ -27,8 +33,15 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIconModule,
     MatProgressSpinnerModule,
     MatButtonModule,
-    TreeModule,
+    SprTreeModule,
     MatMenuModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatGridListModule,
   ],
   providers: [
 
