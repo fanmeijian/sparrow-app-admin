@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MenuRoutingModule } from './menu-routing.module';
 import { MenuListComponent } from './menu-list/menu-list.component';
-import { SprTreeModule } from '@sparrowmini/common-ui-nm';
+import { SprTreeModule, TREE_SERVICE } from '@sparrowmini/common-ui-nm';
 import { MatMenuModule } from '@angular/material/menu';
 import { MenuFormComponent } from './menu-form/menu-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -17,7 +17,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MenuService } from './menu.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import {MatCardModule} from '@angular/material/card';
     MatCardModule,
   ],
   providers: [
-
+    { provide: TREE_SERVICE, useClass: MenuService },
   ]
 })
 export class MenuModule { }

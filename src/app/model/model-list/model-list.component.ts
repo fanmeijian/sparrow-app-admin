@@ -1,0 +1,142 @@
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
+import { CommonApiService } from '@sparrowmini/common-api';
+import { environment } from 'src/environments/environment';
+export const ModelClass='cn.sparrowmini.common.model.Model'
+
+@Component({
+  selector: 'app-model-list',
+  templateUrl: './model-list.component.html',
+  styleUrls: ['./model-list.component.css']
+})
+export class ModelListComponent implements OnInit {
+  synchronizeModel() {
+    this.http.get(`${environment.apiBase}/models/synchronize`).subscribe();
+  }
+  panelOpenState = false;
+
+  dataSource = new MatTableDataSource<any>();
+  pageable = { pageIndex: 0, pageSize: 10, length: 0 };
+  displayedColumns = ['seq', 'code', 'users'];
+
+  constructor(
+    private commonApiService: CommonApiService,
+    private dialog: MatDialog,
+    private http: HttpClient, // private monacoEditorService: MonacoEditorService
+    private snack: MatSnackBar
+  ) { }
+
+  ngOnInit(): void {
+    this.onPageChange(this.pageable);
+    // this.monacoEditorService.load();
+    // this.monacoEditorService.initMonaco(this._editorContainer);
+    // this.initMonaco();
+  }
+
+  onPageChange(event: any) {
+    this.pageable.pageIndex = event.pageIndex
+    this.pageable.pageSize = event.pageSize
+    // this.modelService
+    //   .models(this.pageable.pageIndex,this.pageable.pageSize,['id,asc'])
+      this.commonApiService.filter(ModelClass,{
+        page: 0,
+        size: 10,
+        sort: []
+      }, undefined)
+      .subscribe((res: any) => {
+        this.dataSource = new MatTableDataSource<any>(res.content);
+        this.pageable.length = res.totalElements
+      });
+  }
+
+
+  remove(user: any, sysrole: any) {
+    // console.log(user, sysrole);
+    // this.modelService
+    //   .removeModelPermissions({ sysroles: [user.id] }, user.id.modelId)
+    //   .subscribe(() => {
+    //     this.snack.open('移除成功！', '关闭');
+    //     this.ngOnInit();
+    //   });
+  }
+
+  removeUser(user: any, modelPermission: any) {
+    // console.log(user, sysrole);
+    // this.modelService
+    //   .removeModelPermissions({ usernames: [user.id] }, user.id.modelId)
+    //   .subscribe(() => {
+    //     this.snack.open('移除成功！', '关闭');
+    //     this.ngOnInit();
+    //   });
+  }
+
+  removeRule(user: any, sysrole: any) {
+    // console.log(user, sysrole);
+    // this.modelService
+    //   .removeModelPermissions({ rules: [user.id] }, user.id.modelId)
+    //   .subscribe(() => {
+    //     this.snack.open('移除成功！', '关闭');
+    //     this.ngOnInit();
+    //   });
+  }
+
+  removeAttrRule(user: any, sysrole: any) {
+    // console.log(user, sysrole);
+    // this.modelService
+    //   .removeAttrPermissions(
+    //     { rules: [user.id] },
+    //     user.id.modelAttributeId.modelId,
+    //     user.id.modelAttributeId.attributeId
+    //   )
+    //   .subscribe(() => {
+    //     this.ngOnInit();
+    //   });
+  }
+
+  removeAttrPermission(attr: any, body: any) {
+    // console.log(attr, body);
+    // this.modelService
+    //   .removeAttrPermissions(
+    //     body,
+    //     attr.id.modelId,
+    //     attr.id.attributeId
+    //   )
+    //   .subscribe(() => {
+    //     this.ngOnInit();
+    //   });
+  }
+
+  openPermission(sysrole: any) {
+    // this.dialog
+    //   .open(SprmodelPermisssionComponent, {
+    //     data: sysrole,
+    //     width: '100%',
+    //   })
+    //   .afterClosed()
+    //   .subscribe((result) => {
+    //     if (result) {
+    //       this.snack.open('授权成功！', '关闭');
+    //       this.ngOnInit();
+    //     }
+    //   });
+  }
+
+  openAttrPermission(sysrole: any) {
+    // this.dialog
+    //   .open(AttributePermisssionComponent, {
+    //     width: '100%',
+    //     data: sysrole,
+    //   })
+    //   .afterClosed()
+    //   .subscribe((result) => {
+    //     if (result) {
+    //       this.snack.open('授权成功！', '关闭');
+    //       this.ngOnInit();
+    //     }
+    //   });
+  }
+
+}
