@@ -19,9 +19,9 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MenuService } from './service/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TREE_SERVICE, SprTreeModule } from '@sparrowmini/common-ui-nm';
-import { CommonPipeModule } from '@sparrowmini/common';
 import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService } from '@sparrowmini/common-api';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CommonPipeModule } from '@sparrowmini/common';
 
 export const BASE_PATH: InjectionToken<string> = new InjectionToken('apiBase')
 

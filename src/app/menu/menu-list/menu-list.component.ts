@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonApiService } from '@sparrowmini/common-api';
+import { CommonApiService, CommonTreeService } from '@sparrowmini/common-api';
 import { DynamicFlatNode, TREE_SERVICE, TreeDataSource, TreeService } from '@sparrowmini/common-ui-nm';
 
 @Component({
@@ -25,14 +25,15 @@ export class MenuListComponent {
     throw new Error('Method not implemented.');
   }
   delete() {
-    throw new Error('Method not implemented.');
+    const body = this.checklistSelection.selected
+    this.commonTreeService.delete('cn.sparrowmini.permission.menu.model.Menu',body).subscribe();
   }
   checklistSelection = new SelectionModel<any>(
     true /* multiple */
   );
 
   constructor(
-    private commonApi: CommonApiService,
+    private commonTreeService: CommonTreeService,
     private router: Router,
     private route: ActivatedRoute,
   ) { }

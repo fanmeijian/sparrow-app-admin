@@ -9,9 +9,13 @@ import { CommonTreeService } from '@sparrowmini/common-api';
   templateUrl: './menu-form.component.html',
   styleUrls: ['./menu-form.component.css']
 })
-export class MenuFormComponent implements OnInit{
+export class MenuFormComponent implements OnInit {
+  onTreeSelect($event: any[]) {
+    this.formGroup.patchValue({parentId: $event[0]});
+  }
+  treeNode: any
   submit() {
-    throw new Error('Method not implemented.');
+    this.commonTreeService.upsert('cn.sparrowmini.permission.menu.model.Menu', [this.formGroup.value]).subscribe();
   }
   formGroup: UntypedFormGroup = new FormGroup({
     name: new FormControl(null, Validators.required),
@@ -29,11 +33,18 @@ export class MenuFormComponent implements OnInit{
     private route: ActivatedRoute,
     private http: HttpClient,
     private commonTreeService: CommonTreeService,
-  ){}
+  ) { }
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.commonTreeService.get('cn.sparrowmini.permission.menu.model.Menu', id).subscribe(res=>{
-
+    this.formGroup.disable()
+    this.route.params.subscribe((params: any) => {
+      const id = params.id
+      if (id) {
+        this.commonTreeService.get('cn.sparrowmini.permission.menu.model.Menu', id).subscribe(res => {
+          this.formGroup.patchValue(res)
+          this.treeNode = res
+        });
+      }
     });
+
   }
 }

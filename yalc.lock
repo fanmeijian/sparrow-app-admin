@@ -2,15 +2,15 @@
   "version": "v1",
   "packages": {
     "@sparrowmini/common-ui-nm": {
-      "signature": "967c1ffdd459aa824e7133aebc489e31",
+      "signature": "cf2dc8fa5fc45dd55cd65eacbbecddde",
       "file": true
     },
     "@sparrowmini/common": {
-      "signature": "a0cff7f06b9e1d56440f851ee1acaa55",
+      "signature": "982da69ef4fc62fcbcbe420b260b1069",
       "file": true
     },
     "@sparrowmini/common-api": {
-      "signature": "3e3e332ebb9204b4d8d9df1977269be1",
+      "signature": "fd9b0e245e7a14ab76a1860efe4e08b2",
       "file": true
     }
   }
