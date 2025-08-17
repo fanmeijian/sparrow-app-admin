@@ -18,8 +18,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTreeModule } from '@angular/material/tree';
 import { MenuService } from './menu/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TREE_SERVICE, SprTreeModule, DialogService } from '@sparrowmini/common-ui-nm';
-import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService } from '@sparrowmini/common-api';
+import { TREE_SERVICE, SprTreeModule, DialogService, AuthModule, AuthService } from '@sparrowmini/common-ui-nm';
+import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH } from '@sparrowmini/common-api';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonPipeModule } from '@sparrowmini/common';
 
@@ -66,6 +66,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     SprTreeModule,
     CommonPipeModule,
     CommonApiModule,
+    AuthModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -77,8 +78,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
     },
     { provide: BASE_PATH, useValue: environment.apiBase },
     { provide: COMMON_API_BASE_PATH, useValue: environment.apiBase },
+    { provide: PEM_BASE_PATH, useValue: environment.pemBase },
     CommonTreeService,
-    DialogService
+    DialogService,
+    AuthService,
   ],
   bootstrap: [AppComponent]
 })

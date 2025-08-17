@@ -9,6 +9,7 @@ export const environment = {
   ruleApi: `http://localhost:8999`,
   jpaBase: `${SPARROW_BASE}/common-jpa-controller`,
   apiBase: `${SPARROW_BASE}`,
+  pemBase: 'http://localhost:8080',
   keycloak: {
     authServerUrl: 'https://keycloak.linkair-tech.cn',
     realm: 'dengbo',

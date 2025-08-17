@@ -32,7 +32,7 @@
         <mat-header-cell *matHeaderCellDef>授权用户</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <mat-chip-set #chipList>
-            <mat-chip *ngFor="let userScope of element.userScopes" (removed)="removeUser(userScope, element)">
+            <mat-chip *ngFor="let userScope of element.userScopes" (removed)="removeUser(userScope)">
               {{ userScope.id?.username.substring(0, 8) }}
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
@@ -46,8 +46,8 @@
         <mat-header-cell *matHeaderCellDef>授权角色</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <mat-chip-set #chipList>
-            <mat-chip *ngFor="let sysroleScope of element.sysroleScopes" (removed)="remove(sysroleScope, element)">
-              {{ sysroleScope.sysrole?.name }}
+            <mat-chip *ngFor="let sysroleScope of element.sysroleScopes" (removed)="removeSysrole(sysroleScope)">
+              {{ sysroleScope.id.sysroleId }}
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
               </button>

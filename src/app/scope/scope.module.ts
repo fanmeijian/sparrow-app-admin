@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ScopeRoutingModule } from './scope-routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { AngularMaterialModule } from '../angular-material.module';
+import { AuthModule } from '@sparrowmini/common-ui-nm';
 
 
 
@@ -30,6 +31,7 @@ import { AngularMaterialModule } from '../angular-material.module';
     MatPaginatorModule,
     MatButtonModule,
     AngularMaterialModule,
+    AuthModule
   ]
 })
 export class ScopeModule { }

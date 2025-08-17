@@ -9,7 +9,10 @@ import { CommonApiService } from '@sparrowmini/common-api';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { DialogService } from '@sparrowmini/common-ui-nm';
+import { forkJoin } from 'rxjs';
 export const ScopeClass = 'cn.sparrowmini.common.model.Scope'
+export const UserScopeClass = 'cn.sparrowmini.common.model.pem.UserScope'
+export const SysroleScopeClass = 'cn.sparrowmini.common.model.pem.SysroleScope'
 
 @Component({
   selector: 'app-scope-list',
@@ -82,22 +85,13 @@ export class ScopeListComponent implements OnInit {
       });
   }
 
-  remove(sysrole: any, scope: any) {
-    // this.scopeService
-    //   .removeScopePermissions({ sysroles: [sysrole.id.sysroleId] }, scope.id)
-    //   .subscribe(() => {
-    //     this.snack.open('移除成功！', '关闭');
-    //     this.ngOnInit();
-    //   });
+  removeSysrole(sysroleScope: any) {
+    this.commonApiService.delete(SysroleScopeClass,[sysroleScope.id]).subscribe()
   }
 
-  removeUser(user: any, scope: any) {
-    // this.scopeService
-    //   .removeScopePermissions({ users: [user] }, scope.id)
-    //   .subscribe(() => {
-    //     this.snack.open('移除成功！', '关闭');
-    //     this.ngOnInit();
-    //   });
+  removeUser(userScope: any) {
+    console.log(userScope.id)
+    this.commonApiService.delete(UserScopeClass,[userScope.id]).subscribe()
   }
 
   openPermission(sysrole: any) {
@@ -106,8 +100,15 @@ export class ScopeListComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.snack.open('授权成功！', '关闭');
-          this.onPage(this.pageable);
+          const userBody = res.usernames?.map((m: any) => Object.assign({}, { id: { username: m, scopeId: sysrole.id } }))
+          const sysroleBody = res.sysroleIds?.map((m: any) => Object.assign({}, { id: { sysroleId: m, scopeId: sysrole.id } }))
+          const $userPermission = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.UserScope', userBody)
+          const $rolePermssion = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.SysroleScope', sysroleBody)
+          forkJoin([$userPermission,$rolePermssion]).subscribe(() => {
+            this.snack.open('授权成功！', '关闭');
+            this.onPage(this.pageable);
+          })
+
         }
       });
   }
