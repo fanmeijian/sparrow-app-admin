@@ -4,8 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { CommonApiService } from '@sparrowmini/common-api';
+import { PermissionSelectionComponent } from '@sparrowmini/common-ui-nm';
+import { forkJoin } from 'rxjs';
 import { environment } from 'src/environments/environment';
-export const ModelClass='cn.sparrowmini.common.model.Model'
+import { ModelPermissionComponent } from '../model-permission/model-permission.component';
+export const ModelClass = 'cn.sparrowmini.common.model.Model'
 
 @Component({
   selector: 'app-model-list',
@@ -14,12 +17,12 @@ export const ModelClass='cn.sparrowmini.common.model.Model'
 })
 export class ModelListComponent implements OnInit {
   synchronizeModel() {
-    this.http.post(`${environment.apiBase}/permissions/models/synchronize`,[]).subscribe();
+    this.http.post(`${environment.apiBase}/permissions/models/synchronize`, []).subscribe();
   }
   panelOpenState = false;
 
   dataSource = new MatTableDataSource<any>();
-  pageable = { page: 0, size: 10, length: 0 , sort: []};
+  pageable = { page: 0, size: 10, length: 0, sort: [] };
   displayedColumns = ['seq', 'code', 'users'];
 
   constructor(
@@ -30,7 +33,7 @@ export class ModelListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.onPageChange({pageIndex: this.pageable.page, pageSize: this.pageable.size});
+    this.onPageChange({ pageIndex: this.pageable.page, pageSize: this.pageable.size });
     // this.monacoEditorService.load();
     // this.monacoEditorService.initMonaco(this._editorContainer);
     // this.initMonaco();
@@ -41,7 +44,7 @@ export class ModelListComponent implements OnInit {
     this.pageable.size = event.pageSize
     // this.modelService
     //   .models(this.pageable.pageIndex,this.pageable.pageSize,['id,asc'])
-      this.commonApiService.filter(ModelClass,this.pageable, undefined)
+    this.commonApiService.filter(ModelClass, this.pageable, undefined)
       .subscribe((res: any) => {
         this.dataSource = new MatTableDataSource<any>(res.content);
         this.pageable.length = res.totalElements
@@ -105,19 +108,24 @@ export class ModelListComponent implements OnInit {
     //   });
   }
 
-  openPermission(sysrole: any) {
-    // this.dialog
-    //   .open(SprmodelPermisssionComponent, {
-    //     data: sysrole,
-    //     width: '100%',
-    //   })
-    //   .afterClosed()
-    //   .subscribe((result) => {
-    //     if (result) {
-    //       this.snack.open('授权成功！', '关闭');
-    //       this.ngOnInit();
-    //     }
-    //   });
+  openPermission(model: any) {
+    this.dialog
+      .open(ModelPermissionComponent, { data: model, width: '80%', height: '600px' })
+      .afterClosed()
+      .subscribe((res) => {
+        console.log(res)
+        if (res) {
+          const userBody = res.userPermissions //res.usernames?.map((m: any) => Object.assign({}, { id: { username: m, pageElementId: model.id, type: 'ALLOW' } }))
+          const sysroleBody = res.sysrolePermissions//res.sysroleIds?.map((m: any) => Object.assign({}, { id: { sysroleId: m, pageElementId: model.id, type: 'ALLOW' } }))
+          const $userPermission = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.UserModel', userBody)
+          const $rolePermssion = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.SysroleModel', sysroleBody)
+          forkJoin([$userPermission, $rolePermssion]).subscribe(() => {
+            this.snack.open('授权成功！', '关闭');
+            // this.onPage(this.pageable);
+          })
+
+        }
+      });
   }
 
   openAttrPermission(sysrole: any) {

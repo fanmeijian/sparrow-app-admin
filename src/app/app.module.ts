@@ -19,7 +19,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MenuService } from './menu/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TREE_SERVICE, SprTreeModule, DialogService, AuthModule, AuthService } from '@sparrowmini/common-ui-nm';
-import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH } from '@sparrowmini/common-api';
+import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH, PgelPermissionDirective } from '@sparrowmini/common-api';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonPipeModule } from '@sparrowmini/common';
 

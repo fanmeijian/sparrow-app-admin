@@ -39,6 +39,54 @@
             </button>
             {{ element.id }}
           </div>
+
+          <div>
+            <div
+              *ngFor="let sysroleModel of element.sysroleModels"
+              style="display: flex; flex-direction: row; align-items: center"
+            >
+              <span
+                class="material-icons"
+                style="color: red; cursor: pointer"
+                (click)="remove(sysroleModel, element)"
+              >
+                close
+              </span>
+              {{ sysroleModel.id.sysroleId }}
+              {{ sysroleModel.id.permission }}
+              <span
+                [style]="
+                  'color: ' +
+                  (sysroleModel.id.permissionType === 'ALLOW' ? 'green' : 'red')
+                "
+                >{{ sysroleModel.id.permissionType }}</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <div
+              *ngFor="let userModel of element.userModels"
+              style="display: flex; flex-direction: row; align-items: center"
+            >
+              <span
+                class="material-icons"
+                style="color: red; cursor: pointer"
+                (click)="remove(userModel, element)"
+              >
+                close
+              </span>
+              {{ userModel.id.username }}
+              {{ userModel.id.permission }}
+              <span
+                [style]="
+                  'color: ' +
+                  (userModel.id.permissionType === 'ALLOW' ? 'green' : 'red')
+                "
+                >{{ userModel.id.permissionType }}</span
+              >
+            </div>
+          </div>
         </div>
       </mat-cell>
     </ng-container>
@@ -46,10 +94,12 @@
     <ng-container matColumnDef="users">
       <mat-header-cell *matHeaderCellDef>属性名称</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-accordion style="width: 100%;">
+        <mat-accordion style="width: 100%">
           <mat-expansion-panel (opened)="(true)">
             <mat-expansion-panel-header>
-              <mat-panel-title> ({{element.modelAttributes?.length}}) </mat-panel-title>
+              <mat-panel-title>
+                ({{ element.modelAttributes?.length }})
+              </mat-panel-title>
             </mat-expansion-panel-header>
 
             <div style="display: flex; flex-direction: column">

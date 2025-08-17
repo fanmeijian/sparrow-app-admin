@@ -7,7 +7,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CommonApiComponent, CommonApiService } from '@sparrowmini/common-api';
 import { environment } from 'src/environments/environment';
 import { PageElementFormComponent } from '../page-element-form/page-element-form.component';
-import { DialogService } from '@sparrowmini/common-ui-nm';
+import { DialogService, PermissionSelectionComponent } from '@sparrowmini/common-ui-nm';
+import { forkJoin } from 'rxjs';
 export const PageElementClass = 'cn.sparrowmini.common.model.PageElement'
 
 @Component({
@@ -83,16 +84,23 @@ export class PageElementListComponent implements OnInit {
     //   });
   }
 
-  openPermission(sysrole: any) {
-    // this.dialog
-    //   .open(PageElementPermissionComponent, { data: sysrole})
-    //   .afterClosed()
-    //   .subscribe((res) => {
-    //     if (res) {
-    //       this.snack.open('授权成功！', '关闭');
-    //       // this.onPage(this.pageable);
-    //     }
-    //   });
+  openPermission(pageElement: any) {
+    this.dialog
+      .open(PermissionSelectionComponent, { data: pageElement, width: '80%', height: '600px' })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const userBody = res.usernames?.map((m: any) => Object.assign({}, { id: { username: m, pageElementId: pageElement.id, type: 'ALLOW' } }))
+          const sysroleBody = res.sysroleIds?.map((m: any) => Object.assign({}, { id: { sysroleId: m, pageElementId: pageElement.id, type: 'ALLOW' } }))
+          const $userPermission = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.UserPageElement', userBody)
+          const $rolePermssion = this.commonApiService.upsert('cn.sparrowmini.common.model.pem.SysrolePageElement', sysroleBody)
+          forkJoin([$userPermission, $rolePermssion]).subscribe(() => {
+            this.snack.open('授权成功！', '关闭');
+            this.onPage(this.pageable);
+          })
+
+        }
+      });
   }
 
   onPage(page: PageEvent) {

@@ -57,7 +57,7 @@
       <mat-chip-set #chipList>
         <mat-chip *ngFor="let sysrolePageElement of element.sysrolePageElements"
           (removed)="remove([sysrolePageElement.id],[] )">
-          {{ sysrolePageElement.sysroleName }}
+          {{ sysrolePageElement.id.sysroleId }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>

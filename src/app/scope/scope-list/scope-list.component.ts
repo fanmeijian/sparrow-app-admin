@@ -8,7 +8,7 @@ import { ScopePermissionComponent } from '../scope-permission/scope-permission.c
 import { CommonApiService } from '@sparrowmini/common-api';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { DialogService } from '@sparrowmini/common-ui-nm';
+import { DialogService, PermissionSelectionComponent } from '@sparrowmini/common-ui-nm';
 import { forkJoin } from 'rxjs';
 export const ScopeClass = 'cn.sparrowmini.common.model.Scope'
 export const UserScopeClass = 'cn.sparrowmini.common.model.pem.UserScope'
@@ -96,7 +96,7 @@ export class ScopeListComponent implements OnInit {
 
   openPermission(sysrole: any) {
     this.dialog
-      .open(ScopePermissionComponent, { data: sysrole })
+      .open(PermissionSelectionComponent, { data: sysrole, width: '80%', height:'600px' })
       .afterClosed()
       .subscribe((res) => {
         if (res) {

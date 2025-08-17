@@ -4,18 +4,21 @@ import { PageElementListComponent } from './page-element-list/page-element-list.
 import { PageElementRoutingModule } from './page-element-routing.module';
 import { AngularMaterialModule } from '../angular-material.module';
 import { PageElementFormComponent } from './page-element-form/page-element-form.component';
+import { CommonApiModule } from '@sparrowmini/common-api';
 
 
 
 @NgModule({
   declarations: [
     PageElementListComponent,
-    PageElementFormComponent
+    PageElementFormComponent,
   ],
   imports: [
     CommonModule,
     PageElementRoutingModule,
     AngularMaterialModule,
+    CommonApiModule,
+
   ]
 })
 export class PageElementModule { }
