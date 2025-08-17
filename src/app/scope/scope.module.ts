@@ -10,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { ScopeRoutingModule } from './scope-routing.module';
 import { MatButtonModule } from '@angular/material/button';
+import { AngularMaterialModule } from '../angular-material.module';
 
 
 
@@ -28,6 +29,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatPaginatorModule,
     MatButtonModule,
+    AngularMaterialModule,
   ]
 })
 export class ScopeModule { }

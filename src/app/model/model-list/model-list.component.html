@@ -2,7 +2,9 @@
   触发条件
 </div> -->
 <div>
-  <button mat-flat-button (click)="synchronizeModel()">同步模型</button>
+  <button mat-flat-button (click)="synchronizeModel()" color="primary">
+    同步模型
+  </button>
 </div>
 <div class="example-table-container">
   <mat-table [dataSource]="dataSource">
@@ -44,27 +46,35 @@
     <ng-container matColumnDef="users">
       <mat-header-cell *matHeaderCellDef>属性名称</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <div style="display: flex; flex-direction: column">
-          <ng-container *ngFor="let item of element.modelAttributes">
-            <div>
-              <!-- <app-model-permission-view
+        <mat-accordion style="width: 100%;">
+          <mat-expansion-panel (opened)="(true)">
+            <mat-expansion-panel-header>
+              <mat-panel-title> ({{element.modelAttributes?.length}}) </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div style="display: flex; flex-direction: column">
+              <ng-container *ngFor="let item of element.modelAttributes">
+                <div>
+                  <!-- <app-model-permission-view
                 [modelId]="element.id"
                 [attributeId]="item.id.attributeId"
               ></app-model-permission-view> -->
 
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="openAttrPermission(item)"
-                matTooltip="属性授权"
-              >
-                <mat-icon>manage_accounts</mat-icon>
-              </button>
-              {{ item.id.attributeId }}
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="openAttrPermission(item)"
+                    matTooltip="属性授权"
+                  >
+                    <mat-icon>manage_accounts</mat-icon>
+                  </button>
+                  {{ item.id.attributeId }}
+                </div>
+                <mat-divider></mat-divider>
+              </ng-container>
             </div>
-            <mat-divider></mat-divider>
-          </ng-container>
-        </div>
+          </mat-expansion-panel>
+        </mat-accordion>
       </mat-cell>
     </ng-container>
 
@@ -118,7 +128,7 @@
 
 <mat-paginator
   [pageSizeOptions]="[5, 10, 20]"
-  [pageSize]="pageable.pageSize"
+  [pageSize]="pageable.size"
   showFirstLastButtons
   [length]="pageable.length"
   (page)="onPageChange($event)"

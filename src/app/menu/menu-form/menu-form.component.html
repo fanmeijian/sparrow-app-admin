@@ -75,6 +75,7 @@
       <div>菜单上级：{{ treeNode?.parentName }}</div>
       <spr-sortable-tree
         *ngIf="formGroup.enabled"
+        [initSelected]="[treeNode?.parentId]"
         [multiple]="false"
         (onTreeSelect)="onTreeSelect($event)"
       ></spr-sortable-tree>

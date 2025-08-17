@@ -40,7 +40,7 @@
       <div>上级：{{ treeNode?.parentName }}</div>
       <spr-sortable-tree
         *ngIf="formGroup.enabled"
-        [initSelected]="[treeNode.parentId]"
+        [initSelected]="[treeNode?.parentId]"
         [multiple]="false"
         (onTreeSelect)="onTreeSelect($event)"
       ></spr-sortable-tree>

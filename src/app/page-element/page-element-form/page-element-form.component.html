@@ -1,7 +1,6 @@
 <h3 mat-dialog-title>新增/编辑</h3>
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content>
   <form [formGroup]="formGroup">
-
     <mat-form-field appearance="fill">
       <mat-label>名称</mat-label>
       <input matInput formControlName="name" />
@@ -9,10 +8,14 @@
 
     <mat-form-field appearance="fill">
       <mat-label>代码</mat-label>
-      <input matInput formControlName="code" />
+      <input matInput formControlName="id" />
+    </mat-form-field>
+
+        <mat-form-field appearance="fill">
+      <mat-label>页面</mat-label>
+      <input matInput formControlName="pageId" />
     </mat-form-field>
   </form>
-
 </mat-dialog-content>
 
 <mat-dialog-actions>

@@ -14,12 +14,12 @@ export const ModelClass='cn.sparrowmini.common.model.Model'
 })
 export class ModelListComponent implements OnInit {
   synchronizeModel() {
-    this.http.get(`${environment.apiBase}/models/synchronize`).subscribe();
+    this.http.post(`${environment.apiBase}/permissions/models/synchronize`,[]).subscribe();
   }
   panelOpenState = false;
 
   dataSource = new MatTableDataSource<any>();
-  pageable = { pageIndex: 0, pageSize: 10, length: 0 };
+  pageable = { page: 0, size: 10, length: 0 , sort: []};
   displayedColumns = ['seq', 'code', 'users'];
 
   constructor(
@@ -30,22 +30,18 @@ export class ModelListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.onPageChange(this.pageable);
+    this.onPageChange({pageIndex: this.pageable.page, pageSize: this.pageable.size});
     // this.monacoEditorService.load();
     // this.monacoEditorService.initMonaco(this._editorContainer);
     // this.initMonaco();
   }
 
   onPageChange(event: any) {
-    this.pageable.pageIndex = event.pageIndex
-    this.pageable.pageSize = event.pageSize
+    this.pageable.page = event.pageIndex
+    this.pageable.size = event.pageSize
     // this.modelService
     //   .models(this.pageable.pageIndex,this.pageable.pageSize,['id,asc'])
-      this.commonApiService.filter(ModelClass,{
-        page: 0,
-        size: 10,
-        sort: []
-      }, undefined)
+      this.commonApiService.filter(ModelClass,this.pageable, undefined)
       .subscribe((res: any) => {
         this.dataSource = new MatTableDataSource<any>(res.content);
         this.pageable.length = res.totalElements

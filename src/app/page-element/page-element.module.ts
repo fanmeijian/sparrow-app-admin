@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { PageElementListComponent } from './page-element-list/page-element-list.component';
 import { PageElementRoutingModule } from './page-element-routing.module';
 import { AngularMaterialModule } from '../angular-material.module';
+import { PageElementFormComponent } from './page-element-form/page-element-form.component';
 
 
 
 @NgModule({
   declarations: [
-    PageElementListComponent
+    PageElementListComponent,
+    PageElementFormComponent
   ],
   imports: [
     CommonModule,

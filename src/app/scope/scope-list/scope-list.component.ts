@@ -8,7 +8,8 @@ import { ScopePermissionComponent } from '../scope-permission/scope-permission.c
 import { CommonApiService } from '@sparrowmini/common-api';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-export const ScopeClass= 'cn.sparrowmini.common.model.Scope'
+import { DialogService } from '@sparrowmini/common-ui-nm';
+export const ScopeClass = 'cn.sparrowmini.common.model.Scope'
 
 @Component({
   selector: 'app-scope-list',
@@ -16,8 +17,9 @@ export const ScopeClass= 'cn.sparrowmini.common.model.Scope'
   styleUrls: ['./scope-list.component.css']
 })
 export class ScopeListComponent implements OnInit {
+  className = ScopeClass
   sync() {
-    const $request = this.http.post(`${environment.apiBase}/permissions/scopes/synchronize`,[])
+    const $request = this.http.post(`${environment.apiBase}/permissions/scopes/synchronize`, [])
     $request.subscribe(() => {
       this.snack.open('同步成功！', '关闭');
       this.ngOnInit();
@@ -28,7 +30,7 @@ export class ScopeListComponent implements OnInit {
   // pageable = { page: 0, size: 10 };
 
   total: number = 0;
-  displayedColumns = ['id', 'name', 'code', 'users', 'sysroles','modified', 'actions'];
+  displayedColumns = ['id', 'name', 'code', 'users', 'sysroles', 'modified', 'actions'];
 
   filters: any[] = [];
   pageable = {
@@ -39,10 +41,11 @@ export class ScopeListComponent implements OnInit {
   };
 
   constructor(
-    private scopeService: CommonApiService,
+    private commonApiService: CommonApiService,
     private dialog: MatDialog,
     private snack: MatSnackBar,
     private http: HttpClient,
+    private dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
@@ -53,7 +56,16 @@ export class ScopeListComponent implements OnInit {
     this.dialog.open(ScopeFormComponent);
   }
 
-  delete(sysrole: any) {
+  delete(element: any) {
+    this.dialogService.confirm('是否删除？').subscribe(r => {
+      if (r) {
+        this.commonApiService.delete(this.className, element.id).subscribe(() => {
+          this.ngOnInit();
+          this.snack.open('删除成功！', '关闭');
+        })
+      }
+    })
+
     // this.scopeService.deleteScopes([sysrole.id]).subscribe(() => {
     //   this.ngOnInit();
     //   this.snack.open('删除成功！', '关闭');
@@ -114,11 +126,11 @@ export class ScopeListComponent implements OnInit {
     //     this.dataSource = new MatTableDataSource<any>(res.content);
     //     this.pageable.length = res.totalElements
     //   });
-    this.scopeService.filter(ScopeClass,{
+    this.commonApiService.filter(ScopeClass, {
       page: 0,
       size: 10,
       sort: []
-    },undefined).subscribe((res: any)=>{
+    }, undefined).subscribe((res: any) => {
       this.dataSource = new MatTableDataSource<any>(res.content);
       this.pageable.length = res.totalElements
     })
