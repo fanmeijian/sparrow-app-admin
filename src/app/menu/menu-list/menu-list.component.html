@@ -1,7 +1,7 @@
 <div class="grid">
   <div>
     <div class="s-row">
-      <button class="button" mat-stroked-button color="primary" routerLink="new">
+      <button class="button" mat-stroked-button color="primary" routerLink="new" [appPgelPermission]="'newMenu'">
         新增
       </button>
       <button
@@ -22,6 +22,7 @@
           color="warn"
           (click)="delete()"
           [disabled]="checklistSelection.isEmpty()"
+          [appPgelPermission]="'deleteMenu'"
         >
           删除
         </button>

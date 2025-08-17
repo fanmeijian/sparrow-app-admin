@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@sparrowmini/common-ui-nm": {
-      "signature": "19fb417379488bfa99094025fb391b9f",
+      "signature": "1e9ef2d2b01218004dd13cbf72e15b54",
       "file": true
     },
     "@sparrowmini/common": {

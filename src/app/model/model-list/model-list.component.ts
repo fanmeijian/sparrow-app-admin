@@ -9,6 +9,8 @@ import { forkJoin } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ModelPermissionComponent } from '../model-permission/model-permission.component';
 export const ModelClass = 'cn.sparrowmini.common.model.Model'
+export const SysroleModelClass='cn.sparrowmini.common.model.pem.SysroleModel'
+export const UserModelClass='cn.sparrowmini.common.model.pem.UserModel'
 
 @Component({
   selector: 'app-model-list',
@@ -16,6 +18,9 @@ export const ModelClass = 'cn.sparrowmini.common.model.Model'
   styleUrls: ['./model-list.component.css']
 })
 export class ModelListComponent implements OnInit {
+  removeSysrole(sysroleModel: any) {
+    this.commonApiService.delete(SysroleModelClass,[sysroleModel.id]).subscribe();
+  }
   synchronizeModel() {
     this.http.post(`${environment.apiBase}/permissions/models/synchronize`, []).subscribe();
   }
@@ -62,14 +67,8 @@ export class ModelListComponent implements OnInit {
     //   });
   }
 
-  removeUser(user: any, modelPermission: any) {
-    // console.log(user, sysrole);
-    // this.modelService
-    //   .removeModelPermissions({ usernames: [user.id] }, user.id.modelId)
-    //   .subscribe(() => {
-    //     this.snack.open('移除成功！', '关闭');
-    //     this.ngOnInit();
-    //   });
+  removeUser(userModel: any) {
+    this.commonApiService.delete(UserModelClass,[userModel.id]).subscribe()
   }
 
   removeRule(user: any, sysrole: any) {
