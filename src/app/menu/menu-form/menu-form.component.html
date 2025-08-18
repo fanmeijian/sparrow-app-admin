@@ -72,6 +72,33 @@
         </mat-form-field>
       </ng-container>
 
+      <div>菜单权限</div>
+      <div>
+        <mat-chip-set>
+          <mat-chip
+            *ngFor="let userMenu of userMenus"
+            (removed)="removeUser(userMenu)"
+          >
+            {{ userMenu.id.username }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-set>
+
+        <mat-chip-set>
+          <mat-chip
+            *ngFor="let sysroleMenu of sysroleMenus"
+            (removed)="removeSysrole(sysroleMenu)"
+          >
+            {{ sysroleMenu.id.sysroleId }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
       <div>菜单上级：{{ treeNode?.parentName }}</div>
       <spr-sortable-tree
         *ngIf="formGroup.enabled"

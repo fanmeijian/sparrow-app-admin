@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import * as _ from 'lodash'
 import { TreeService, DynamicFlatNode } from '@sparrowmini/common-ui-nm';
 import { CommonTreeService } from '@sparrowmini/common-api';
-import { MenuClass } from './menu.constant';
+import { BaseTreeDTOClass, MenuClass } from './menu.constant';
 
 @Injectable({
   providedIn: 'root'

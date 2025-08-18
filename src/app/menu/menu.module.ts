@@ -20,6 +20,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MenuService } from './menu.service';
 import { CommonApiModule } from "@sparrowmini/common-api";
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { CommonApiModule } from "@sparrowmini/common-api";
     MatInputModule,
     MatGridListModule,
     MatCardModule,
-    CommonApiModule
+    CommonApiModule,
+    MatChipsModule
 ],
   providers: [
     { provide: TREE_SERVICE, useClass: MenuService },

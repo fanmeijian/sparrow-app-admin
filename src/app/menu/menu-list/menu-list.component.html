@@ -1,7 +1,13 @@
 <div class="grid">
   <div>
     <div class="s-row">
-      <button class="button" mat-stroked-button color="primary" routerLink="new" [appPgelPermission]="'newMenu'">
+      <button
+        class="button"
+        mat-stroked-button
+        color="primary"
+        routerLink="new"
+        [appPgelPermission]="'newMenu'"
+      >
         新增
       </button>
       <button
@@ -16,6 +22,16 @@
         </div>
       </button>
       <mat-menu #menu="matMenu">
+        <button
+          class="button"
+          mat-menu-item
+          color="warn"
+          (click)="grantPermission()"
+          [disabled]="checklistSelection.isEmpty()"
+          [appPgelPermission]="'menu:permssion:grant'"
+        >
+          授权
+        </button>
         <button
           class="button"
           mat-menu-item
