@@ -10,6 +10,7 @@ import { PageElementFormComponent } from '../page-element-form/page-element-form
 import { DialogService, PermissionSelectionComponent } from '@sparrowmini/common-ui-nm';
 import { forkJoin } from 'rxjs';
 export const PageElementClass = 'cn.sparrowmini.common.model.PageElement'
+export const UserPageElementClass = 'cn.sparrowmini.common.model.pem.UserPageElement'
 
 @Component({
   selector: 'app-page-element-list',
@@ -17,6 +18,9 @@ export const PageElementClass = 'cn.sparrowmini.common.model.PageElement'
   styleUrls: ['./page-element-list.component.css']
 })
 export class PageElementListComponent implements OnInit {
+  removeUserPageElement(userPageElement: any) {
+    this.commonApiService.delete(UserPageElementClass,[userPageElement.id]).subscribe();
+  }
 
   className = PageElementClass
 

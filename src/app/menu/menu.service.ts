@@ -18,11 +18,10 @@ export class MenuService implements TreeService {
     private http: HttpClient,
     private commonTreeService: CommonTreeService,
   ) { }
-  move(nodeId: any, nextNodeId: any): Observable<void> {
-    return this.http.post<void>(`${this.apiBase}/menu/move`, [], { params: { currentId: nodeId, nextId: nextNodeId } });
+  move(nodeId: any, nextNodeId: any): Observable<any> {
+    return this.commonTreeService.move(nodeId,nextNodeId,MenuClass)
   }
   getChildren(node: any): Observable<DynamicFlatNode[]> {
-    // return this.http.get<any>(`${this.apiBase}/menu`, { params: { parentId: node.id } }).pipe(map(m => _.sortBy(m.content, 'seq')));
     return this.commonTreeService.children(MenuClass, {
       page: 0,
       size: 1000,
@@ -30,7 +29,6 @@ export class MenuService implements TreeService {
     }, node.id).pipe(map((m: any)=>_.sortBy(m.content,'seq'))) as any
   }
   initialData(): Observable<DynamicFlatNode[]> {
-    // return this.http.get<any>(`${this.apiBase}/menu`,{}).pipe(map(m=>_.sortBy(m.content,'seq')));
     return this.commonTreeService.children(MenuClass, {
       page: 0,
       size: 1000,

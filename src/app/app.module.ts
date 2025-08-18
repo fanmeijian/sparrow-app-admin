@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,10 +18,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTreeModule } from '@angular/material/tree';
 import { MenuService } from './menu/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TREE_SERVICE, SprTreeModule, DialogService, AuthModule, AuthService } from '@sparrowmini/common-ui-nm';
+import { TREE_SERVICE, SprTreeModule, DialogService, AuthModule, AuthService, GlobalErrorHandlerService } from '@sparrowmini/common-ui-nm';
 import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH, PgelPermissionDirective } from '@sparrowmini/common-api';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonPipeModule } from '@sparrowmini/common';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 export const BASE_PATH: InjectionToken<string> = new InjectionToken('apiBase')
 
@@ -34,7 +35,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
         clientId: environment.keycloak.clientId,
       },
       initOptions: {
-        onLoad: 'login-required',
+        onLoad: environment.keycloak.login,
       },
       bearerExcludedUrls: ['/assets'],
     }).then(async res => {
@@ -79,6 +80,11 @@ function initializeKeycloak(keycloak: KeycloakService) {
     { provide: BASE_PATH, useValue: environment.apiBase },
     { provide: COMMON_API_BASE_PATH, useValue: environment.apiBase },
     { provide: PEM_BASE_PATH, useValue: environment.pemBase },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandlerService,
+    },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
     CommonTreeService,
     DialogService,
     AuthService,

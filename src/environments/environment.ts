@@ -1,19 +1,17 @@
+import { KeycloakOnLoad } from "keycloak-js";
 
 // const SPARROW_BASE='https://api2.linkair-tech.cn/sparrow-permission-service'
-const SPARROW_BASE='http://localhost:8081/dengbo-service'
-// const SPARROW_API='https://api2.linkair-tech.cn/sparrow-permission-service'
-
+const SPARROW_BASE = 'http://localhost:8080'
+const API_BASE = 'http://localhost:8081/dengbo-service'
+const login: KeycloakOnLoad = 'login-required'
 export const environment = {
   production: false,
-  // apiBase: 'https://api2.linkair-tech.cn/sparrow-service',
-  ruleApi: `http://localhost:8999`,
-  jpaBase: `${SPARROW_BASE}/common-jpa-controller`,
-  apiBase: `${SPARROW_BASE}`,
-  pemBase: 'http://localhost:8080',
+  apiBase: `${API_BASE}`,
+  pemBase: `${SPARROW_BASE}`,
   keycloak: {
     authServerUrl: 'https://keycloak.linkair-tech.cn',
     realm: 'dengbo',
     clientId: 'dengbo-web',
-    login: "check-sso"
+    login: login
   },
 };

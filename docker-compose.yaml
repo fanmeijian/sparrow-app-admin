@@ -1,0 +1,12 @@
+version: "3"
+services:
+  dengbo-admin:
+    image: youweisoft/sparrow-app-admin:1.0
+    ports:
+      - "8036:80"
+    environment:
+      - API_BASE=http://localhost:8081/dengbo-service
+      - PEM_BASE=http://localhost:8091/dengbo-bpm
+      - REALM=dengbo
+      - CLIENT_ID=dengbo-admin
+      - KEYCLOAK_API_BASE=https://keycloak.linkair-tech.cn

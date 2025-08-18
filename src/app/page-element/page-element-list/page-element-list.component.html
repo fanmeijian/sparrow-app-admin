@@ -41,7 +41,7 @@
     <mat-header-cell *matHeaderCellDef>授权用户</mat-header-cell>
     <mat-cell *matCellDef="let element">
       <mat-chip-set #chipList>
-        <mat-chip *ngFor="let userPageElement of element.userPageElements" (removed)="remove([],[userPageElement])">
+        <mat-chip *ngFor="let userPageElement of element.userPageElements" (removed)="removeUserPageElement(userPageElement)">
           {{ userPageElement.id.username?.substring(0, 8) }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
