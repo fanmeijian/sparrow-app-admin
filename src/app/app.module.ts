@@ -19,7 +19,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MenuService } from './menu/menu.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TREE_SERVICE, SprTreeModule, DialogService, AuthModule, AuthService, GlobalErrorHandlerService } from '@sparrowmini/common-ui-nm';
-import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH, PgelPermissionDirective } from '@sparrowmini/common-api';
+import { CommonApiModule, BASE_PATH as COMMON_API_BASE_PATH, CommonTreeService, PEM_BASE_PATH, PgelPermissionDirective, CommonApiService } from '@sparrowmini/common-api';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonPipeModule } from '@sparrowmini/common';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
@@ -85,9 +85,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
       useClass: GlobalErrorHandlerService,
     },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
-    CommonTreeService,
-    DialogService,
-    AuthService,
+    [CommonTreeService, DialogService, AuthService, CommonApiService]
   ],
   bootstrap: [AppComponent]
 })

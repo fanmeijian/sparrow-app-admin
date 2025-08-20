@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Copy the Angular app build files to the Nginx HTML directory
-COPY dist/sparrow-web-admin /usr/share/nginx/html
+COPY dist/sparrow-app-admin /usr/share/nginx/html
 
 # Copy the environment variable replacement script
 COPY set-env.sh /usr/share/nginx/set-env.sh

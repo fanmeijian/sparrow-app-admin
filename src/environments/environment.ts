@@ -1,8 +1,10 @@
 import { KeycloakOnLoad } from "keycloak-js";
 
 // const SPARROW_BASE='https://api2.linkair-tech.cn/sparrow-permission-service'
-const SPARROW_BASE = 'http://localhost:8080'
-const API_BASE = 'http://localhost:8081/dengbo-service'
+// const SPARROW_BASE = 'http://localhost:8080'
+const SPARROW_BASE = 'http://localhost:8300/toupiao-service'
+// const API_BASE = 'http://localhost:8081/dengbo-service'
+const API_BASE = 'http://localhost:8300/toupiao-service'
 const login: KeycloakOnLoad = 'login-required'
 export const environment = {
   production: false,
@@ -10,8 +12,8 @@ export const environment = {
   pemBase: `${SPARROW_BASE}`,
   keycloak: {
     authServerUrl: 'https://keycloak.linkair-tech.cn',
-    realm: 'dengbo',
-    clientId: 'dengbo-web',
+    realm: 'liyun-prd',
+    clientId: 'toupiao-web',
     login: login
   },
 };
